@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-bg: #0F172A;
+  --color-surface: #FFFFFF;
+  --color-accent: #38BDF8;
+  --color-ink: #1E293B;
+  --color-muted: #64748B;
+  --color-success: #10B981;
+  --color-border: #E2E8F0;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-ink font-sans;
+  }
+  
+  h1, h2, h3 {
+    @apply font-sans font-extrabold tracking-[-0.04em];
+  }
+}
+
+.glass {
+  @apply bg-white/80 backdrop-blur-md border border-white/20;
+}
+
+.agent-card {
+  @apply bg-white rounded-2xl p-5 border border-border shadow-sm;
+}
+
+.agent-tag {
+  @apply text-[10px] font-extrabold uppercase text-accent tracking-wider mb-2 block;
+}
+
