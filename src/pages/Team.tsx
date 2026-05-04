@@ -1,16 +1,43 @@
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { TeamMember } from "../types";
+import { db } from "../lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Team() {
   const [team, setTeam] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/team")
-      .then(res => res.json())
-      .then(data => setTeam(data))
-      .catch(err => console.error("Failed to fetch team", err));
+    loadTeam();
   }, []);
+
+  const loadTeam = async () => {
+    try {
+      const snap = await getDocs(collection(db, "team"));
+      if (snap.empty) {
+        const localTeam = [
+          { id: '1', name: 'Dr. Sarah Chen', role: 'Executive Director', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop', bio: 'Expert in international human rights law with 15 years of advocacy experience.' },
+          { id: '2', name: 'Marcus Rodriguez', role: 'Head of Advocacy', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop', bio: 'Strategic lead for global campaigns and grassroots mobilization.' }
+        ];
+        setTeam(localTeam);
+      } else {
+        setTeam(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as TeamMember)));
+      }
+    } catch (err) {
+      console.error("Failed to fetch team", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="h-8 w-8 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-24 bg-white">
@@ -36,7 +63,7 @@ export default function Team() {
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
               </div>

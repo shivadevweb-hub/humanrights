@@ -13,7 +13,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="py-24 bg-white">
+    <div className="py-24 bg-bg transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Left: Info */}
@@ -31,30 +31,30 @@ export default function Contact() {
 
             <div className="space-y-8">
               <div className="flex items-start gap-6">
-                <div className="p-4 bg-[#F1F5F9] rounded-2xl text-bg">
+                <div className="p-4 bg-surface rounded-2xl text-accent border border-border">
                   <Mail className="h-6 w-6" />
                 </div>
                 <div>
                   <div className="text-[10px] font-extrabold uppercase tracking-widest text-muted mb-1">Email Us</div>
-                  <div className="text-xl font-extrabold tracking-tight">info@rightsassist.ai</div>
+                  <div className="text-xl font-extrabold tracking-tight text-ink">justice@ihrf.in</div>
                 </div>
               </div>
               <div className="flex items-start gap-6">
-                <div className="p-4 bg-[#F1F5F9] rounded-2xl text-bg">
+                <div className="p-4 bg-surface rounded-2xl text-accent border border-border">
                   <Phone className="h-6 w-6" />
                 </div>
                 <div>
                   <div className="text-[10px] font-extrabold uppercase tracking-widest text-muted mb-1">Call Hotline</div>
-                  <div className="text-xl font-extrabold tracking-tight">+1 (555) 000-0000</div>
+                  <div className="text-xl font-extrabold tracking-tight text-ink">+91 000 000 0000</div>
                 </div>
               </div>
               <div className="flex items-start gap-6">
-                <div className="p-4 bg-[#F1F5F9] rounded-2xl text-bg">
+                <div className="p-4 bg-surface rounded-2xl text-accent border border-border">
                   <MapPin className="h-6 w-6" />
                 </div>
                 <div>
                   <div className="text-[10px] font-extrabold uppercase tracking-widest text-muted mb-1">Visit Office</div>
-                  <div className="text-xl font-extrabold tracking-tight">123 Justice Ave, Global City</div>
+                  <div className="text-xl font-extrabold tracking-tight text-ink">New Delhi, India</div>
                 </div>
               </div>
             </div>
@@ -64,14 +64,14 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-[#F8FAFC] p-10 rounded-[40px] border border-border"
+            className="bg-surface p-10 rounded-[40px] border border-border"
           >
             {submitted ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
                 <div className="h-20 w-20 bg-success/10 text-success rounded-full flex items-center justify-center mb-6">
                   <CheckCircle2 className="h-10 w-10" />
                 </div>
-                <h2 className="text-3xl font-extrabold tracking-tight mb-2">MESSAGE SENT</h2>
+                <h2 className="text-3xl font-extrabold tracking-tight mb-2 text-ink">MESSAGE SENT</h2>
                 <p className="text-muted font-medium">We'll get back to you within 24 hours.</p>
                 <button 
                   onClick={() => setSubmitted(false)}
@@ -89,7 +89,7 @@ export default function Contact() {
                       required
                       type="text"
                       placeholder="John Doe"
-                      className="w-full px-6 py-4 rounded-2xl border border-border bg-white focus:ring-2 focus:ring-accent outline-none transition-all font-medium"
+                      className="w-full px-6 py-4 rounded-2xl border border-border bg-bg text-ink focus:ring-2 focus:ring-accent outline-none transition-all font-medium"
                     />
                   </div>
                   <div className="space-y-2">
@@ -98,7 +98,7 @@ export default function Contact() {
                       required
                       type="email"
                       placeholder="john@example.com"
-                      className="w-full px-6 py-4 rounded-2xl border border-border bg-white focus:ring-2 focus:ring-accent outline-none transition-all font-medium"
+                      className="w-full px-6 py-4 rounded-2xl border border-border bg-bg text-ink focus:ring-2 focus:ring-accent outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -108,7 +108,7 @@ export default function Contact() {
                     required
                     type="text"
                     placeholder="Urgent Legal Assistance"
-                    className="w-full px-6 py-4 rounded-2xl border border-border bg-white focus:ring-2 focus:ring-accent outline-none transition-all font-medium"
+                    className="w-full px-6 py-4 rounded-2xl border border-border bg-bg text-ink focus:ring-2 focus:ring-accent outline-none transition-all font-medium"
                   />
                 </div>
                 <div className="space-y-2">
@@ -117,12 +117,12 @@ export default function Contact() {
                     required
                     rows={5}
                     placeholder="How can we help you today?"
-                    className="w-full px-6 py-4 rounded-2xl border border-border bg-white focus:ring-2 focus:ring-accent outline-none transition-all font-medium resize-none"
+                    className="w-full px-6 py-4 rounded-2xl border border-border bg-bg text-ink focus:ring-2 focus:ring-accent outline-none transition-all font-medium resize-none"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-bg text-white py-5 rounded-2xl font-extrabold uppercase tracking-widest hover:bg-ink transition-all shadow-xl shadow-bg/10"
+                  className="w-full bg-accent text-white py-5 rounded-2xl font-extrabold uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-accent/20"
                 >
                   Send Message
                 </button>

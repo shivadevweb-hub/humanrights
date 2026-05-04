@@ -11,7 +11,7 @@ export interface AIResult {
 
 export interface Complaint {
   id: string;
-  timestamp: string;
+  timestamp: number;
   userName: string;
   userEmail: string;
   originalText: string;
@@ -30,4 +30,12 @@ export interface GalleryImage {
   id: string;
   url: string;
   caption: string;
+  description?: string;
+}
+
+export interface Service {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
 }

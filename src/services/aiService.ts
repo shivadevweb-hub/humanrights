@@ -1,76 +1,48 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { AIResult } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 const SYSTEM_PROMPT = `
-You are the "AI Human Rights Assistance Platform" intelligence system. 
-You simulate 4 internal specialized agents to process human rights complaints:
+You are a Senior Human Rights Legal Consultant and AI Assistant for the "CIVIS AI" Platform.
+Your goal is to analyze human rights complaints provided by users and provide detailed legal guidance.
 
-1. Complaint Analyzer: Classifies the complaint and summarizes the core problem.
-2. Legal Intelligence Agent: Identifies specific human rights violated and provides a simple legal explanation.
-3. Guidance Agent: Provides practical suggestions and step-by-step actions for the user.
-4. Follow-up Agent: Identifies missing information and asks clarifying questions.
+Analyze the following complaint and provide a structured JSON response with these exact fields:
+- category: The broad human rights category (e.g., Freedom of Speech, Privacy, Labor Rights, etc.)
+- problem_summary: A concise 1-2 sentence summary of the core issue.
+- key_issues: A list (array) of the specific legal or ethical issues identified.
+- rights_violated: A string listing the specific rights from major instruments (UDHR, ICCPR, etc.) that may have been infringed.
+- legal_explanation: A detailed explanation of why these rights are relevant in this context.
+- suggestions: A list of practical suggestions for the user.
+- step_by_step_actions: A list of clear, actionable steps for the user to take.
+- follow_up_questions: A list of 3 questions to clarify the situation.
 
-Your output must be a single structured JSON object.
-
-Process:
-- Analyze the user's input thoroughly.
-- Synthesize the findings from all 4 simulated agents.
-- Ensure the legal explanation is accessible but professional.
-- Provide actionable steps.
-
-Return ONLY JSON in the following format:
-{
-  "category": "e.g., Labor Rights, Privacy, Freedom of Speech, etc.",
-  "problem_summary": "A concise summary of the user's situation.",
-  "key_issues": ["Issue 1", "Issue 2"],
-  "rights_violated": "Specific rights from the Universal Declaration of Human Rights or local laws.",
-  "legal_explanation": "A simple explanation of why these rights are relevant.",
-  "suggestions": ["Practical suggestion 1", "Practical suggestion 2"],
-  "step_by_step_actions": ["Action 1", "Action 2"],
-  "follow_up_questions": ["Question 1", "Question 2"]
-}
+Provide ONLY the JSON object. Do not include any markdown formatting wrappers.
 `;
 
-export async function analyzeComplaint(text: string): Promise<AIResult> {
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: text,
-      config: {
-        systemInstruction: SYSTEM_PROMPT,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            category: { type: Type.STRING },
-            problem_summary: { type: Type.STRING },
-            key_issues: { type: Type.ARRAY, items: { type: Type.STRING } },
-            rights_violated: { type: Type.STRING },
-            legal_explanation: { type: Type.STRING },
-            suggestions: { type: Type.ARRAY, items: { type: Type.STRING } },
-            step_by_step_actions: { type: Type.ARRAY, items: { type: Type.STRING } },
-            follow_up_questions: { type: Type.ARRAY, items: { type: Type.STRING } },
-          },
-          required: [
-            "category",
-            "problem_summary",
-            "key_issues",
-            "rights_violated",
-            "legal_explanation",
-            "suggestions",
-            "step_by_step_actions",
-            "follow_up_questions"
-          ],
-        },
-      },
-    });
+let genAI: GoogleGenerativeAI | null = null;
 
-    const result = JSON.parse(response.text || "{}");
-    return result as AIResult;
-  } catch (error) {
-    console.error("AI Analysis Error:", error);
-    throw new Error("Failed to analyze complaint. Please try again.");
+function getAI() {
+  if (!genAI) {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : '');
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY is not defined. Please set VITE_GEMINI_API_KEY in your environment.");
+    }
+    genAI = new GoogleGenerativeAI(apiKey);
+  }
+  return genAI;
+}
+
+export async function analyzeComplaint(text: string): Promise<AIResult> {
+  const ai = getAI();
+  const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const result = await model.generateContent([SYSTEM_PROMPT, `User Complaint: ${text}`]);
+  const response = await result.response;
+  const jsonText = response.text().replace(/```json|```/g, "").trim();
+  
+  try {
+    return JSON.parse(jsonText);
+  } catch (err) {
+    console.error("Failed to parse AI response", jsonText);
+    throw new Error("AI analysis generated invalid format. Please try again.");
   }
 }

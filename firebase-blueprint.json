@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Public and private user information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "createdAt", "updatedAt"]
+    },
+    "Complaint": {
+      "title": "Human Rights Complaint",
+      "description": "Stored reports of human rights violations",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "analysis": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "resolved"] }
+      },
+      "required": ["userId", "content", "createdAt", "status"]
+    },
+    "TeamMember": {
+      "title": "Team Member",
+      "description": "Organization staff and volunteers",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "image": { "type": "string" },
+        "bio": { "type": "string" }
+      },
+      "required": ["name", "role", "image"]
+    },
+    "GalleryImage": {
+      "title": "Gallery Image",
+      "description": "Photos of events and impact",
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "caption": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["url", "caption"]
+    },
+    "Service": {
+      "title": "Service",
+      "description": "Services offered by IHRF",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" }
+      },
+      "required": ["title", "description", "icon"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Primary user profiles"
+    },
+    "/complaints/{complaintId}": {
+      "schema": "Complaint",
+      "description": "Human rights violation complaints"
+    },
+    "/team/{memberId}": {
+      "schema": "TeamMember",
+      "description": "Staff profiles"
+    },
+    "/gallery/{imageId}": {
+      "schema": "GalleryImage",
+      "description": "Gallery impact images"
+    },
+    "/services/{serviceId}": {
+      "schema": "Service",
+      "description": "IHRF services"
+    }
+  }
+}
